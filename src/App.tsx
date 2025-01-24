@@ -12,7 +12,7 @@ function App() {
   const handleGenerate = async (input: string) => {
     try {
       const data = await fetchAnalogy(input);
-      setAnalogy(data.analogy);
+      setAnalogy(data);
     } catch (error) {
       console.error("Error fetching analogy:", error);
     }

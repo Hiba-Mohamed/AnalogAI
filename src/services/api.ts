@@ -1,7 +1,8 @@
 import { OpenAI } from "openai";
 import axios from "axios";
+
 const API = axios.create({
-  baseURL: "https://analogai.onrender.com/", // Replace with your backend URL
+  baseURL: "https://analogai.onrender.com/",
 });
 
 // Initialize the OpenAI instance using the API key from the environment
@@ -12,8 +13,18 @@ const openai = new OpenAI({
 // Function to fetch analogy
 export async function fetchAnalogy(concept: string): Promise<string> {
   try {
+    // Try the backend API first
+    const apiResponse = await API.post("/generate-analogy", { concept });
+    if (apiResponse?.data) {
+      return apiResponse.data; // Use the analogy from the backend
+    }
+  } catch (apiError) {
+    console.error("Backend API error, falling back to OpenAI:", apiError);
+  }
+
+  try {
     // Fallback to OpenAI API for analogy generation
-    const response = await openai.chat.completions.create({
+    const openaiResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo", // or 'gpt-4' for more advanced models
       messages: [
         {
@@ -30,10 +41,10 @@ export async function fetchAnalogy(concept: string): Promise<string> {
 
     // Extract the generated analogy from the OpenAI response
     const analogy =
-      response.choices[0]?.message?.content || "No analogy generated.";
+      openaiResponse.choices[0]?.message?.content || "No analogy generated.";
     return analogy; // Return the analogy as a string
-  } catch (error) {
-    console.error("Error fetching analogy:", error);
+  } catch (openaiError) {
+    console.error("OpenAI API error:", openaiError);
     return "Error occurred while generating the analogy."; // Fallback error message
   }
 }
