@@ -27,8 +27,3 @@ Before you can run the project, ensure you have the following installed:
 - MongoDB (locally or use a cloud-based solution)
 - A cloud account (AWS for deployment)
 
-### Clone the Repository
-
-```bash
-git clone https://github.com/yourusername/analogai.git
-cd analogai
