@@ -23,6 +23,8 @@ const App = () => {
       return;
     }
 
+    
+
     try {
       // Make request to OpenAI API
       const response = await axios.post(
