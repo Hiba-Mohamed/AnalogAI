@@ -1,18 +1,35 @@
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 
+// Update the OutputSectionProps interface to include loading and error props
 interface OutputSectionProps {
   analogy: string;
+  loading: boolean;
+  error: string | null;
 }
 
-const OutputSection: React.FC<OutputSectionProps> = ({ analogy }) => (
-  <Box mt={4} display="flex" justifyContent="center">
-    <Paper elevation={3} sx={{ p: 2, width: "100%", maxWidth: 600 }}>
-      <Typography variant="h6">Generated Analogy:</Typography>
-      <Typography variant="body1" mt={2}>
-        {analogy || "Your analogy will appear here!"}
-      </Typography>
-    </Paper>
-  </Box>
-);
+const OutputSection = ({ analogy, loading, error }: OutputSectionProps) => {
+  return (
+    <Box>
+      {loading && (
+        <Box sx={{ display: "flex", justifyContent: "center", padding: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ marginTop: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      {analogy && !loading && !error && (
+        <Box sx={{ padding: 2 }}>
+          <Typography variant="h6">Generated Analogy:</Typography>
+          <Typography>{analogy}</Typography>
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 export default OutputSection;

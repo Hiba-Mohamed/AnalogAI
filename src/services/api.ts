@@ -1,64 +1,24 @@
 import axios from "axios";
 
-// Backend API setup
+// Use the environment variable for the backend URL
 const API = axios.create({
-  baseURL: "https://analogai.onrender.com/", // Replace with your backend URL
+  baseURL: process.env.REACT_APP_BACKEND_URL || "http://localhost:5000", // Backend URL from .env
 });
 
-// OpenAI API setup
-const API_KEY = process.env.REACT_APP_OPENAI_API_KEY; // Use the correct variable name
-
-if (!API_KEY) {
-  throw new Error(
-    "OpenAI API key is missing. Set REACT_APP_OPENAI_API_KEY in your Render environment variables."
-  );
-}
-
-const openai = axios.create({
-  baseURL: "https://api.openai.com/v1",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${API_KEY}`,
-  },
-});
-
-// Fetch analogy from your backend
-export const fetchAnalogy = async (concept: string): Promise<string> => {
+// Function to fetch analogy from backend
+const fetchAnalogy = async (concept: string): Promise<string> => {
   try {
     const response = await API.post("/generate-analogy", { concept });
-    return response.data.analogy; // Ensure your backend returns `analogy` in the response
+    return response.data.analogy; // Ensure your backend returns 'analogy'
   } catch (error) {
     console.error("Error fetching analogy from backend:", error);
-    throw new Error("Failed to fetch analogy from the backend.");
+    throw new Error("Failed to fetch analogy from backend.");
   }
 };
 
-// Fetch analogy directly from OpenAI
-export const fetchAnalogyFromOpenAI = async (
-  concept: string
-): Promise<string> => {
-  try {
-    const response = await openai.post("/chat/completions", {
-      model: "gpt-3.5-turbo", // or 'gpt-4' for more advanced models
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a helpful assistant who provides real-world analogies to explain concepts.",
-        },
-        {
-          role: "user",
-          content: `Please provide a simple real-world analogy to explain the concept: "${concept}".`,
-        },
-      ],
-      max_tokens: 60,
-    });
-
-    const analogy =
-      response.data.choices[0]?.message?.content || "No analogy generated.";
-    return analogy;
-  } catch (error) {
-    console.error("Error fetching analogy from OpenAI:", error);
-    throw new Error("Failed to fetch analogy from OpenAI.");
-  }
+// Example usage in a component
+export const handleFetchAnalogy = async () => {
+  const concept = "photosynthesis"; // Replace with dynamic input if needed
+  const analogy = await fetchAnalogy(concept);
+  console.log(analogy); // Handle analogy here
 };
