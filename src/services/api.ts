@@ -6,7 +6,7 @@ const API = axios.create({
 });
 
 // OpenAI API setup
-const API_KEY = process.env.OPENAI_API_KEY; // Use environment variable
+const API_KEY = process.env.REACT_APP_OPENAI_API_KEY; // Use the correct variable name
 
 if (!API_KEY) {
   throw new Error(
