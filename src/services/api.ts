@@ -8,7 +8,7 @@ const API = axios.create({
 // Function to fetch analogy from backend
 const fetchAnalogy = async (concept: string): Promise<string> => {
   try {
-    const response = await API.post("/generate-analogy", { concept });
+    const response = await API.post("/", { concept });
     return response.data.analogy; // Ensure your backend returns 'analogy'
   } catch (error) {
     console.error("Error fetching analogy from backend:", error);

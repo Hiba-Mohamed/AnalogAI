@@ -5,6 +5,7 @@ import OutputSection from "./components/OutputSection";
 import Footer from "./components/Footer";
 import { Box } from "@mui/material";
 import axios from "axios";
+import dotenv from "dotenv";
 
 const App = () => {
   const [analogy, setAnalogy] = useState<string>("");
@@ -14,6 +15,7 @@ const App = () => {
   const handleGenerate = async (input: string) => {
     setLoading(true);
     setError(null);
+    dotenv.config();
 
     const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
@@ -22,8 +24,6 @@ const App = () => {
       setLoading(false);
       return;
     }
-
-    
 
     try {
       // Make request to OpenAI API
